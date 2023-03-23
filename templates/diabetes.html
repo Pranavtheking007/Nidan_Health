@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Diabetes | Nidan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../static/forms.css">
+
+</head>
+<body>
+
+<div class="container">
+  <div class="title">Diabetes (Lifestyle)</div>
+  <form action="dia_form.html" method="POST" name="diabetes">
+    <div class="user__details">
+      <div class="input__box">
+        <span class="details">BMI</span>
+        <input type="number" name="BMI" placeholder="E.g: 19.5" required style="border: 2px solid #454545;">
+      </div>
+
+      <div class="input__box">
+        <span class="details">Age</span>
+        <input type="number" name="Age" placeholder="E.g: 20" required style="border: 2px solid #454545;">
+      </div>
+
+      <div class="input__box" >
+        <span class="details">Sex</span>
+        <div class="select">
+          <select name="sex">
+              <option>--Select--</option>
+              <option>Male</option>
+              <option>Female</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+      <div class="input__box">
+        <span class="details">Annual Income In Lacs</span>
+        <input type="number" name="Income" placeholder="E.g: 2 for 2 lacs" required min="0"style="border: 2px solid #454545;">
+      </div>
+
+      <div class="input__box">
+        <span class="details">Physical Health</span>
+        <input type="number" name="PhysHlth" placeholder="E.g: 30" required style="border: 2px solid #454545;">
+      </div>
+
+      <div class="input__box">
+        <span class="details">General Health</span>
+        <input type="number" name="GenHlth" placeholder="E.g: 4 " required min="0" max="5" style="border: 2px solid #454545;">
+      </div>
+
+      <div class="input__box" >
+        <span class="details">High BP</span>
+        <div class="select">
+          <select name="HighBP">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+      <div class="input__box" >
+        <span class="details">High Cholesterol</span>
+        <div class="select">
+          <select name="HighChol">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+      <div class="input__box" >
+        <span class="details">Smoking?</span>
+        <div class="select">
+          <select name="Smoker">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+       <div class="input__box" >
+        <span class="details">Stroke</span>
+        <div class="select">
+          <select name="Stroke">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+       <div class="input__box" >
+        <span class="details">Heart Disease or Attack?</span>
+        <div class="select">
+          <select name="HeartDisease">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+       <div class="input__box" >
+        <span class="details">Physical Activity</span>
+        <div class="select">
+          <select name="PhysActivity">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+       <div class="input__box" >
+        <span class="details">Eat Veggies?</span>
+        <div class="select">
+          <select name="Veggies">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+       <div class="input__box" >
+        <span class="details">Alcohol Consumption?</span>
+        <div class="select">
+          <select name="HeavyAlcoholConsump">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+       <div class="input__box" >
+        <span class="details">Difficulty in Walking?</span>
+        <div class="select">
+          <select name="DiffWalk">
+              <option>--Select--</option>
+              <option>Yes</option>
+              <option>No</option>
+          </select>
+          <div class="select_arrow">
+          </div>
+      </div>
+      </div>
+
+    </div>
+    <!-- <div class="gender__details">
+      <input type="radio" name="gender" id="dot-1">
+      <input type="radio" name="gender" id="dot-2">
+      <input type="radio" name="gender" id="dot-3">
+      <span class="gender__title">Gender</span>
+      <div class="category">
+        <label for="dot-1">
+          <span class="dot one"></span>
+          <span>Male</span>
+        </label>
+        <label for="dot-2">
+          <span class="dot two"></span>
+          <span>Female</span>
+        </label>
+        <label for="dot-3">
+          <span class="dot three"></span>
+          <span>Prefer not to say</span>
+        </label>
+      </div>
+    </div> -->
+
+    <div class="button">
+    
+        <input onclick="window.location.href='url'"; type="submit" value="Diagnose">
+    
+
+    </div>
+
+    <div class="button" style="margin-top: -1rem;">
+    
+      <input onclick="window.location.href='../index.html'"; type="submit" value="Back to selection">
+  
+
+  </div>
+  
+  </form>
+
+  <footer>
+    <p class="footer__copy">&#169; 2023 Nidan. All right reserved</p>
+  </footer>
+
+  
+</div>
+
+
+  
+</body>
+</html>
