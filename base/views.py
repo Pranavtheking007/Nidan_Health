@@ -21,24 +21,27 @@ Config = {
   'messagingSenderId': "168818032129",
   'appId': "1:168818032129:web:59afe36e586f70ee180a00",
   'measurementId': "G-WFNZNJNPZ6",
-  "databaseURL": ""
+  "databaseURL": "https://nidan-b15a6-default-rtdb.asia-southeast1.firebasedatabase.app",
 };
 firebase = pyrebase.initialize_app(Config);
 
 authe = firebase.auth()
 database = firebase.database()
-
+'''''
 # Sign In Page
 
 def login(request):
-    
-   
-    return render(request , 'loginsignup.html')
+       print('GET****************')
+       return render(request , 'loginsignup.html')
 
-def postsign(request):    
+
+def Login(request): 
     
-    email = request.POST.get('email')
-    passw = request.POST.get('pass')
+    
+    if request.method == 'POST':
+        print('POST****************')
+        email = request.POST.get('email')
+        passw = request.POST.get('pass')
 
     try:
         user = authe.sign_in_with_email_and_password(email,passw)
@@ -58,24 +61,38 @@ aut.logout(request)
 
 # Sign Up Page
 
-name = request.POST.get('name')
-email = request.POST.get('email')
-passw = request.POST.get('pass')
+def SignUP(request):
+    if request.method == 'POST':
+        print('POST*********')
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        passw = request.POST.get('pass')
+        #print(name,email,passw)
+        try:
+            user = authe.create_user_with_email_and_password(email,passw)
+            print('YAY')
+            uid = user['localId']
+        except:
+            msg = 'Unable to sign you up currently'
+            print('OH NOOOOOOO !!!!!!!')
 
-try:
-    user = authe.create_user_with_email_and_password(email,passw)
-except:
-    msg = 'Unable to sign you up currently'
-    uid = user['localid']
+        data = {
+        'name':name,
+        'status':'1'
+        }
 
-data = {
-'name':name,
-'status':'1'
-}
+        database.child('users').child(uid).child('details').set(data)
+        return render(request,'index.html')
 
-database.child('users').child(uid).child('details').set(data)
+def postsigh(request):
+    if request.method == 'POST':
+        print('POST*********')
+        name = request.POST['name']
+        email = request.POST['email']
+        passw = request.POST.get['pass']
 
-
+    data = {'name':name , 'email':email , 'passw':passw}
+    database.push(data)
 # Now for any models
 """
 import time
@@ -95,7 +112,7 @@ a=a['localid']
 database.child('users').child(a).child(#Jo Bhi prediction ho rha ho => naam string mai hona chahiye).child('millis').child(data)
 
 """
-
+'''
 # home function
 def home(request):
 
@@ -160,7 +177,9 @@ def heart(request):
         oldpeak = request.POST['oldpeak']
         slope = request.POST['slope']
 
+        print('******************************')
         print(cp,ca,sex,age,trestbps,thal,fbs,restecg,thalach,exang,oldpeak,slope)
+        
     #return render('Result_Tp.html')
     
     #if request. == 'POST':
@@ -188,6 +207,7 @@ def diabetes(request):
         HeavyAlcoholConsump = request.POST['HeavyAlcoholConsump']
         DiffWalk = request.POST['DiffWalk']
 
+        print("****************************************")
         print(BMI,Age,sex,Income,PhysHlth,GenHlth,HighBP,HighChol,Smoker,Stroke,HeartDisease,PhysActivity,Veggies,HeavyAlcoholConsump,DiffWalk)
 
 #diabetes med page render
@@ -205,8 +225,9 @@ def diabetesmed(request):
         TG = request.POST['TG']
         HDL = request.POST['HDL']
         VLDL = request.POST['VLDL']
-        BMI = request.POST['BMI']    
+        BMI = request.POST['BMI']  
 
+        print('*************************************************')
         print(Gender,Age,Urea,HbA1c,Chol,TG,HDL,VLDL,BMI)
 #mental health students
 def mentalhlth(request):
@@ -224,10 +245,5 @@ def mentalhlth(request):
         Do_you_have_Panic_attack = request.POST['Do you have Panic attack?']
         Did_you_seek_any_specialist_for_a_treatment = request.POST['Did you seek any specialist for a treatment?']
 
-
+    print('******************************************************')
     print(Choose_your_gender,age,What_is_your_course,Your_current_year_of_Study,What_is_your_CGPA,Do_you_have_Anxiety,Do_you_have_Panic_attack,Did_you_seek_any_specialist_for_a_treatment)    
-
-    
-    
-    
-    

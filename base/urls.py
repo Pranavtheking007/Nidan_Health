@@ -6,8 +6,12 @@ from django.http import HttpResponse
 
 
 urlpatterns = [
+    path('',views.login),
+   #path('',views.login,name='home'),
+    path('SignUP',views.SignUP),
+    path('Login',views.Login),
     
-    path('',views.login,name='home'),
+
     path('index.html',views.home),
     path('stroke.html',views.stroke,name = 'stroke'), 
     path('card.html',views.card),

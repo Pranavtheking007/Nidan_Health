@@ -12,8 +12,9 @@
       <div class="box">
         <div class="inner-box">
           <div class="forms-wrap">
-            <form action="index.html" autocomplete="off" class="sign-in-form">
+            <form action="Login" method="POST" autocomplete="off" class="sign-in-form">
               <div class="logo">
+                {% csrf_token %}
                 <img src="../static/logo.png" alt="nidan.club" />
                 <h4>Nidan</h4>
               </div>
@@ -47,7 +48,7 @@
                   <label>Password</label>
                 </div>
 
-                <input type="submit" value="Sign In" class="sign-btn" />
+                <input type="submit" class="sign-btn" />
 
                 <!-- <p class="text">
                   Forgotten your password or you login datails?
@@ -56,8 +57,10 @@
               </div>
             </form>
 
-            <form action="index.html" autocomplete="off" class="sign-up-form">
+            <form action="SignUP" method="POST" autocomplete="off" class="sign-up-form">
+             
               <div class="logo">
+                {% csrf_token %}
                 <img src="../static/logo.png" alt="nidan.club" />
                 <h4>Nidan</h4>
               </div>
@@ -70,7 +73,10 @@
 
               <div class="actual-form">
                 <div class="input-wrap">
-                  <input
+                  <input 
+                    name="name"
+                    email="email"
+                    pass = "pass"
                     type="text"
                     class="input-field"
                     autocomplete="off"
@@ -81,6 +87,7 @@
 
                 <div class="input-wrap">
                   <input
+                    name="email"
                     type="email"
                     class="input-field"
                     autocomplete="off"
@@ -91,6 +98,7 @@
 
                 <div class="input-wrap">
                   <input
+                    name="pass"
                     type="password"
                     minlength="4"
                     class="input-field"
@@ -100,7 +108,7 @@
                   <label>Password</label>
                 </div>
 
-                <input type="submit" value="Sign Up" class="sign-btn" />
+                <input type="submit" class="sign-btn" />
 
                 <p class="text">
                   By signing up, I agree to the

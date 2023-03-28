@@ -30,6 +30,9 @@ from django.urls import path,include
 urlpatterns = [
     #path('admin/',admin.site.urls),
     path('',include('base.urls')),
+    #path('^$',include('base.urls')),
+    path('Login', include('base.urls')),
+    path('SignUP',include('base.urls')),
     path('index.html',include('base.urls')),
     path('stroke.html',include('base.urls')),
     path('heartdisease.html',include('base.urls')),

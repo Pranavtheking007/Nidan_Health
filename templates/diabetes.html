@@ -11,7 +11,8 @@
 
 <div class="container">
   <div class="title">Diabetes (Lifestyle)</div>
-  <form action="dia_form.html" method="POST" name="diabetes">
+  <form method="POST" name="diabetes">
+    {%csrf_token%}
     <div class="user__details">
       <div class="input__box">
         <span class="details">BMI</span>
@@ -192,14 +193,14 @@
 
     <div class="button">
     
-        <input onclick="window.location.href='url'"; type="submit" value="Diagnose">
+        <input  type="submit" value="Diagnose">
     
 
     </div>
 
     <div class="button" style="margin-top: -1rem;">
     
-      <input onclick="window.location.href='../index.html'"; type="submit" value="Back to selection">
+      <input  type="submit" value="Back to selection">
   
 
   </div>

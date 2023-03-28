@@ -13,9 +13,9 @@
   
   <div class="title">Mental Health (Students)</div>
   <form target="_blank" action="#" method="POST" name="mentalhealthstudents">
-    
+    {%csrf_token%}
+      
     <div class="user__details">
-      {%csrf_token%}
       
 
       <div class="input__box" >
@@ -107,14 +107,14 @@
     
     <div class="button">
     
-        <input onclick="window.location.href='url'"; type="submit" value="Diagnose">
+        <input  type="submit" value="Diagnose">
     
 
     </div>
 
     <div class="button" style="margin-top: -1rem;">
     
-      <input onclick="window.location.href='../index.html'"; type="submit" value="Back to selection">
+      <input  type="submit" value="Back to selection">
   
 
   </div>
