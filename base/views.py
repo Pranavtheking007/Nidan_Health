@@ -1,33 +1,49 @@
 #imports
 from django.shortcuts import render
 from django.http import HttpResponse
-import joblib
 from .forms import stroke
 import tensorflow as tf
 import base.Stroke_Main as STM
-import h5py
+import base.Heart_Main as HM
+import base.Diabetes_Main as Dia_New
+import base.Diabetes_Life as Dia_Life
+import base.Mental_Student as Men_Stud
 from django.views.decorators.csrf import csrf_protect,csrf_exempt
 import pyrebase
+import time
+from datetime import datetime,timezone
+import pytz
 
 # Create your views here
 
 #Your web app's Firebase configuration
 #For Firebase JS SDK v7.20.0 and later, measurementId is optional
 Config = {
-  'apiKey': "AIzaSyDO3w550comACj2SeQso1W26pab2qWfYJc",
-  'authDomain': "nidan-bd662.firebaseapp.com",
-  'projectId': "nidan-bd662",
-  'storageBucket': "nidan-bd662.appspot.com",
-  'messagingSenderId': "168818032129",
-  'appId': "1:168818032129:web:59afe36e586f70ee180a00",
-  'measurementId': "G-WFNZNJNPZ6",
-  "databaseURL": "https://nidan-b15a6-default-rtdb.asia-southeast1.firebasedatabase.app",
+  'apiKey': "AIzaSyDb8QpIKOBTskKiLMimxrf1PGydxDVKHLI",
+  'authDomain': "nidan-b15a6.firebaseapp.com",
+  'databaseURL': "https://nidan-b15a6-default-rtdb.asia-southeast1.firebasedatabase.app",
+  'projectId': "nidan-b15a6",
+  'storageBucket': "nidan-b15a6.appspot.com",
+  'messagingSenderId': "1023148822483",
+  'appId': "1:1023148822483:web:7b1cbc91896a88582fa926",
+  'measurementId': "G-4959W891PF",
+  'databaseURL': "https://nidan-b15a6-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
+# Config = {
+#   'apiKey': "AIzaSyDO3w550comACj2SeQso1W26pab2qWfYJc",
+#   'authDomain': "nidan-bd662.firebaseapp.com",
+#   'projectId': "nidan-bd662",
+#   'storageBucket': "nidan-bd662.appspot.com",
+#   'messagingSenderId': "168818032129",
+#   'appId': "1:168818032129:web:59afe36e586f70ee180a00",
+#   'measurementId': "G-WFNZNJNPZ6",
+#   "databaseURL": "https://nidan-b15a6-default-rtdb.asia-southeast1.firebasedatabase.app",
+# };
 firebase = pyrebase.initialize_app(Config);
 
-authe = firebase.auth()
+auth = firebase.auth()
 database = firebase.database()
-'''''
+
 # Sign In Page
 
 def login(request):
@@ -42,14 +58,17 @@ def Login(request):
         print('POST****************')
         email = request.POST.get('email')
         passw = request.POST.get('pass')
+        print(email,passw)
 
-    try:
-        user = authe.sign_in_with_email_and_password(email,passw)
-    except:
-        msg = 'Invalid Credentials, COMRADE!!!'
+        try:
+            user = auth.sign_in_with_email_and_password(email,passw)
+        except:
+            msg = 'Invalid Credentials, COMRADE!!!'
+            print(msg)
 
-    session_id = user['idToken']
-    request.session['uid']=str(session_id)
+        session_id = user['idToken']
+        request.session['uid']=str(session_id)
+        return render(request,'index.html')
 
 
 
@@ -69,7 +88,7 @@ def SignUP(request):
         passw = request.POST.get('pass')
         #print(name,email,passw)
         try:
-            user = authe.create_user_with_email_and_password(email,passw)
+            user = auth.create_user_with_email_and_password(email,passw)
             print('YAY')
             uid = user['localId']
         except:
@@ -84,15 +103,15 @@ def SignUP(request):
         database.child('users').child(uid).child('details').set(data)
         return render(request,'index.html')
 
-def postsigh(request):
-    if request.method == 'POST':
-        print('POST*********')
-        name = request.POST['name']
-        email = request.POST['email']
-        passw = request.POST.get['pass']
+# def postsigh(request):
+#     if request.method == 'POST':
+#         print('POST*********')
+#         name = request.POST['name']
+#         email = request.POST['email']
+#         passw = request.POST.get['pass']
 
-    data = {'name':name , 'email':email , 'passw':passw}
-    database.push(data)
+#     data = {'name':name , 'email':email , 'passw':passw}
+#     database.push(data)
 # Now for any models
 """
 import time
@@ -112,7 +131,7 @@ a=a['localid']
 database.child('users').child(a).child(#Jo Bhi prediction ho rha ho => naam string mai hona chahiye).child('millis').child(data)
 
 """
-'''
+
 # home function
 def home(request):
 
@@ -151,9 +170,10 @@ def stroke(request):
         ##print(Y)
         #print('\n') 
         Y=str(Y)
+        print(Y)
         # return HttpResponse(request,{X,Y})
         #return render(request,'Result_Tp.html',{'e':X}
-    return render(request,'Result_Tp.html',{'e':Y})
+    #return render(request,'Result_Tp.html',{'e':Y})
  
     
     
@@ -176,11 +196,14 @@ def heart(request):
         exang = request.POST['exang']
         oldpeak = request.POST['oldpeak']
         slope = request.POST['slope']
+        chol = request.POST['chol']
 
         print('******************************')
-        print(cp,ca,sex,age,trestbps,thal,fbs,restecg,thalach,exang,oldpeak,slope)
+        X = HM.predictions(cp,ca,sex,age,trestbps,thal,fbs,restecg,thalach,exang,oldpeak,slope,chol)
+        X = str(X)
+        print(X)
         
-    #return render('Result_Tp.html')
+    return render(request,'Result_Tp.html')
     
     #if request. == 'POST':
 
@@ -208,7 +231,8 @@ def diabetes(request):
         DiffWalk = request.POST['DiffWalk']
 
         print("****************************************")
-        print(BMI,Age,sex,Income,PhysHlth,GenHlth,HighBP,HighChol,Smoker,Stroke,HeartDisease,PhysActivity,Veggies,HeavyAlcoholConsump,DiffWalk)
+        X=Dia_Life.prediction(BMI,Age,sex,Income,PhysHlth,GenHlth,HighBP,HighChol,Smoker,Stroke,HeartDisease,PhysActivity,Veggies,HeavyAlcoholConsump,DiffWalk)
+        print(X)
 
 #diabetes med page render
 def diabetesmed(request):
@@ -228,7 +252,35 @@ def diabetesmed(request):
         BMI = request.POST['BMI']  
 
         print('*************************************************')
-        print(Gender,Age,Urea,HbA1c,Chol,TG,HDL,VLDL,BMI)
+        X = Dia_New.preds(Gender,Age,Urea,HbA1c,Chol,TG,HDL,VLDL,BMI)
+
+
+        tz = pytz.timezone('Asia/Kolkata')
+        time_now = datetime.now(timezone.utc).astimezone(tz)
+        millis = int(time.mktime(time_now.timetuple()))
+
+        idtoken = request.session['uid']
+        a = auth.get_account_info(idtoken)
+        a=a['users']
+        a=a[0]
+        a=a['localId'] 
+        print(str(a))
+
+        data = {
+            'Gender':Gender,
+            'Age':Age,
+            'Urea':Urea,
+            'HbA1c':HbA1c,
+            'Chol':Chol,
+            'TG':TG,
+            'HDL':HDL,
+            'VLDL':VLDL,
+            'BMI':BMI,
+            'Result':str(X)
+        }
+
+        database.child('users').child(a).child('Dia_Med').child(millis).set(data)
+    return render(request,'Result_Tp.html')
 #mental health students
 def mentalhlth(request):
     
@@ -246,4 +298,47 @@ def mentalhlth(request):
         Did_you_seek_any_specialist_for_a_treatment = request.POST['Did you seek any specialist for a treatment?']
 
     print('******************************************************')
-    print(Choose_your_gender,age,What_is_your_course,Your_current_year_of_Study,What_is_your_CGPA,Do_you_have_Anxiety,Do_you_have_Panic_attack,Did_you_seek_any_specialist_for_a_treatment)    
+    X=Men_Stud.predictions(Choose_your_gender,age,What_is_your_course,Your_current_year_of_Study,What_is_your_CGPA,Do_you_have_Anxiety,Do_you_have_Panic_attack,Did_you_seek_any_specialist_for_a_treatment)    
+    print(X)
+#Django report upload function
+
+# def upload(request):
+#     if request.method == 'POST':
+#         upload_image = request.FILES['images'] # put images in html form <input type = 'form' name = 'images>
+#         print(upload_image.size)
+#         print(upload_image.name)
+
+# settings.py 
+# MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
+# MEDIA_URL = '/media/
+
+#views.py file
+#from django.core.files.storage import FileSystemStorage 
+# fs = FileSystemStorage()
+#fs.save(upload_image.name)
+
+# urls.py(project wale file me)
+#from django.config import settings
+#from django.conf.urls.static import static
+#if settings.DEBUG:
+# urlpatterns = static(settings.MEDIA_URL , document_root = settings.MEDIA_ROOT)        
+
+
+
+
+#Django retrive data from the database
+# def check(request):
+#     idtoken = request.session['uid']
+#     a = auth.get_account_info(idtoken)
+#     a = a['users']
+#     a = a[0]
+#     a = a['localId']
+#    # function report needed to be added in the firebase
+#     timestamps = database.child('users').child(a).child('report').shallow().get().vals()
+#     lis_tps = []
+#     for i in timestamps:
+#         lis_tps.append(i)
+#     lis_tps.sort(reverse = True)    
+#     print(timestamps)
+
+#     return render(request, 'Result_Tp.html')
