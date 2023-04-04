@@ -58,7 +58,6 @@ def Login(request):
         print('POST****************')
         email = request.POST.get('email')
         passw = request.POST.get('pass')
-        print(email,passw)
 
         try:
             user = auth.sign_in_with_email_and_password(email,passw)
@@ -70,8 +69,19 @@ def Login(request):
         request.session['uid']=str(session_id)
         return render(request,'index.html')
 
+def chronic(request):
+    return render(request , 'chronicdiseaseabout.html')
 
+def physhlth(request):
+    return render(request,'physicalhealthabout.html')
 
+def mntlhlth(request):
+    return render(request,'mentalhealthabout.html')
+
+def dashboard(request):
+    if request.method == 'GET':
+        return render(request,'dashboardindex.html')
+# Log Out Page
 # Log Out Page
 """
 aut.logout(request)
@@ -170,9 +180,45 @@ def stroke(request):
         ##print(Y)
         #print('\n') 
         Y=str(Y)
+        X = str(X)
+        print("Y@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         print(Y)
+        print("X:-****************************")
+        print(X)
+        print('\n')
+
+        data = {
+            'Gender':[gender],
+            'Age':[age],
+            'Hypertension':[Hypertension],
+            'Heart disease':[heart_disease],
+            'Ever Married':[ever_married],
+            'Work Type':[work_type],
+            'Residence Type':[residence_type],
+            'Average Glcose Level':[avg_glucose_level],
+            'BMI':[bmi],
+            'Smoking Status':[smoking_status]
+        }
+
+        tz = pytz.timezone('Asia/Kolkata')
+        time_now = datetime.now(timezone.utc).astimezone(tz)
+        millis = int(time.mktime(time_now.timetuple()))
+
+        idtoken = request.session['uid']
+        a = auth.get_account_info(idtoken)
+        a=a['users']
+        a=a[0]
+        a=a['localId'] 
+        print(str(a))
+
+        database.child('users').child(a).child('Stroke').child(millis).set(data)        
+        
         # return HttpResponse(request,{X,Y})
-        #return render(request,'Result_Tp.html',{'e':X}
+        if X=='[0]':
+            return render(request ,'Stroke_No_Result.html',{'e':Y})
+        else:
+            return render(request,'Stroke_Yes_Result.html',{'e':Y})
+
     #return render(request,'Result_Tp.html',{'e':Y})
  
     
@@ -202,8 +248,37 @@ def heart(request):
         X = HM.predictions(cp,ca,sex,age,trestbps,thal,fbs,restecg,thalach,exang,oldpeak,slope,chol)
         X = str(X)
         print(X)
-        
-    return render(request,'Result_Tp.html')
+
+        data = {
+            'Chest Pain':[cp],
+            'ca':[ca],
+            'Sex':[sex],
+            'Age':[age],
+            'trestbps':[trestbps],
+            'thal':[thal],
+            'fbs':[fbs],
+            'restecg':[restecg],
+            'thalach':[thalach],
+            'exang':[exang],
+            'oldpeak':[oldpeak],
+            'slope':[slope],
+            'chol':[chol]
+        }
+
+        tz = pytz.timezone('Asia/Kolkata')
+        time_now = datetime.now(timezone.utc).astimezone(tz)
+        millis = int(time.mktime(time_now.timetuple()))
+
+        idtoken = request.session['uid']
+        a = auth.get_account_info(idtoken)
+        a=a['users']
+        a=a[0]
+        a=a['localId'] 
+        print(str(a)) 
+
+        database.child('users').child(a).child('Heart Disease').child(millis).set(data)
+    
+    return render(request,'result.html',{'e':X})
     
     #if request. == 'POST':
 
@@ -234,6 +309,38 @@ def diabetes(request):
         X=Dia_Life.prediction(BMI,Age,sex,Income,PhysHlth,GenHlth,HighBP,HighChol,Smoker,Stroke,HeartDisease,PhysActivity,Veggies,HeavyAlcoholConsump,DiffWalk)
         print(X)
 
+        data = {
+            'BMI':[BMI],
+            'Age':[Age],
+            'Sex':[sex],
+            'Income':[Income],
+            'Physical Health':[PhysHlth],
+            'General Health':[GenHlth],
+            'High BP':[HighBP],
+            'High Cholestrol':[HighChol],
+            'Smoker':[Smoker],
+            'Stroke':[Stroke],
+            'Heart Disease':[HeartDisease],
+            'Physical Activity':[PhysActivity],
+            'Veggies':[Veggies],
+            'Heavy Alcohol Consumption':[HeavyAlcoholConsump],
+            'Difficulty in walking':[DiffWalk]
+        }
+
+        tz = pytz.timezone('Asia/Kolkata')
+        time_now = datetime.now(timezone.utc).astimezone(tz)
+        millis = int(time.mktime(time_now.timetuple()))
+
+        idtoken = request.session['uid']
+        a = auth.get_account_info(idtoken)
+        a=a['users']
+        a=a[0]
+        a=a['localId'] 
+        print(str(a)) 
+
+        database.child('users').child(a).child('Mental Health Student').child(millis).set(data) 
+
+        return render(request , 'diabetesmedresult.html',{'e':X})
 #diabetes med page render
 def diabetesmed(request):
     
@@ -254,7 +361,7 @@ def diabetesmed(request):
         print('*************************************************')
         X = Dia_New.preds(Gender,Age,Urea,HbA1c,Chol,TG,HDL,VLDL,BMI)
 
-
+        #return render(request , 'result.html',{'e':X})
         tz = pytz.timezone('Asia/Kolkata')
         time_now = datetime.now(timezone.utc).astimezone(tz)
         millis = int(time.mktime(time_now.timetuple()))
@@ -280,7 +387,7 @@ def diabetesmed(request):
         }
 
         database.child('users').child(a).child('Dia_Med').child(millis).set(data)
-    return render(request,'Result_Tp.html')
+        return render(request , 'diabetesmedresult.html',{'e':X})
 #mental health students
 def mentalhlth(request):
     
@@ -297,9 +404,33 @@ def mentalhlth(request):
         Do_you_have_Panic_attack = request.POST['Do you have Panic attack?']
         Did_you_seek_any_specialist_for_a_treatment = request.POST['Did you seek any specialist for a treatment?']
 
-    print('******************************************************')
-    X=Men_Stud.predictions(Choose_your_gender,age,What_is_your_course,Your_current_year_of_Study,What_is_your_CGPA,Do_you_have_Anxiety,Do_you_have_Panic_attack,Did_you_seek_any_specialist_for_a_treatment)    
-    print(X)
+        print('******************************************************')
+        X=Men_Stud.predictions(Choose_your_gender,age,What_is_your_course,Your_current_year_of_Study,What_is_your_CGPA,Do_you_have_Anxiety,Do_you_have_Panic_attack,Did_you_seek_any_specialist_for_a_treatment)
+
+        data = {
+            'Gender':[Choose_your_gender],
+            'Age':[age],
+            'Course':[What_is_your_course],
+            'Year of Study':[Your_current_year_of_Study],
+            'CGPA':[What_is_your_CGPA],
+            'Anxiety':[Do_you_have_Anxiety],
+            'Panic Attack':[Do_you_have_Panic_attack],
+            'Specialist Treatment':[Did_you_seek_any_specialist_for_a_treatment]
+        }
+
+        tz = pytz.timezone('Asia/Kolkata')
+        time_now = datetime.now(timezone.utc).astimezone(tz)
+        millis = int(time.mktime(time_now.timetuple()))
+
+        idtoken = request.session['uid']
+        a = auth.get_account_info(idtoken)
+        a=a['users']
+        a=a[0]
+        a=a['localId'] 
+        print(str(a)) 
+
+        database.child('users').child(a).child('Mental Health Student').child(millis).set(data)    
+        
 #Django report upload function
 
 # def upload(request):

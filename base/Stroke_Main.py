@@ -50,7 +50,7 @@ X_train_ct = ct.transform(X_train)
 
 print(X_train_ct.shape)
 
-model = tf.keras.models.load_model("base\Stroke_model_hdf5_new.h5")
+model = tf.keras.models.load_model("base\Stroke_model_hdf5_soft.h5")
 
 def Predictions(gender, age, hypertension, heart_disease, ever_married,work_type,Residence_type,avg_glucose_level,bmi,smoking_status,Model=model,ct=ct):
     Para = {
@@ -74,7 +74,7 @@ def Predictions(gender, age, hypertension, heart_disease, ever_married,work_type
 
     res = Model.predict(pred)
 
-    Res = tf.round(res)
-    RES1 = res[0,0]
+    Res = res.argmax(axis=1)
+    RES1 = res[0,Res[0]]
 
     return Res,RES1

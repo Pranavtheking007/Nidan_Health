@@ -40,7 +40,11 @@ urlpatterns = [
     path('diabetes.html',include('base.urls')),
     path('diabetesmed.html',include('base.urls')),
     path('mentalhealthstudents.html',include('base.urls')),
-    path('Result_Tp.html',include('base.urls'))
+    path('Result_Tp.html',include('base.urls')),
+    path('chronicdiseaseabout.html',include('base.urls')),
+    path('physicalhealthabout.html',include('base.urls')),
+    path('mentalhealthabout.html',include('base.urls')),
+    path('dashboardindex.html',include('base.urls')),
 
 ]
 

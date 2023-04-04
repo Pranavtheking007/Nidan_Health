@@ -20,6 +20,10 @@ urlpatterns = [
     path('diabetesmed.html',views.diabetesmed),
     path('mentalhealthstudents.html',views.mentalhlth),
     path('Result_Tp.html',views.stroke, name='stroke'),
+    path('chronicdiseaseabout.html',views.chronic),
+    path('physicalhealthabout.html',views.physhlth),
+    path('mentalhealthabout.html',views.mntlhlth),
+    path('dashboardindex.html',views.dashboard),
 
 
     

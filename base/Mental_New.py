@@ -15,6 +15,7 @@ from sklearn.cluster import KMeans
 from sklearn.cluster import DBSCAN
 from sklearn.metrics import silhouette_score
 from sklearn.decomposition import PCA
+import pickle
 
 df = pd.read_csv('https://raw.githubusercontent.com/Pranavtheking007/Nidan-2.0/main/mental-heath-in-tech-2016_20161114.csv')
 
@@ -118,7 +119,6 @@ for i in range(len(df['Why or why not?.1'])):
   scores1[i] = score1
 
 df['Why or why not?.1'] = scores1
-df.drop('Do you have previous employers?',axis=1,inplace=True)
 
 cols=[]
 
@@ -186,3 +186,51 @@ ct = make_column_transformer(
     (OneHotEncoder(handle_unknown='ignore'),columns))
 
 ct.fit(df)
+
+model = pickle.load(open("base\Mental_Health.pkl",'rb'))
+
+
+  
+
+def predictions(A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A_27,A_28,A_29,A_30,A_31,A_32):
+  list_1 = [A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,A_27,A_28,A_29,A_30,A_31,A_32]
+  list_2 = ['Are you self-employed?',
+       'How many employees does your company or organization have?',
+       'Does your employer provide mental health benefits as part of healthcare coverage?',
+       'Do you know the options for mental health care available under your employer-provided coverage?',
+       'Has your employer ever formally discussed mental health (for example, as part of a wellness campaign or other official communication)?',
+       'Does your employer offer resources to learn more about mental health concerns and options for seeking help?',
+       'Is your anonymity protected if you choose to take advantage of mental health or substance abuse treatment resources provided by your employer?',
+       'If a mental health issue prompted you to request a medical leave from work, asking for that leave would be:',
+       'Do you think that discussing a mental health disorder with your employer would have negative consequences?',
+       'Do you think that discussing a physical health issue with your employer would have negative consequences?',
+       'Would you feel comfortable discussing a mental health disorder with your coworkers?',
+       'Would you feel comfortable discussing a mental health disorder with your direct supervisor(s)?',
+       'Do you feel that your employer takes mental health as seriously as physical health?',
+       'Have you heard of or observed negative consequences for co-workers who have been open about mental health issues in your workplace?',
+       'Would you be willing to bring up a physical health issue with a potential employer in an interview?',
+       'Why or why not?',
+       'Would you bring up a mental health issue with a potential employer in an interview?',
+       'Why or why not?.1',
+       'Do you feel that being identified as a person with a mental health issue would hurt your career?',
+       'Do you think that team members/co-workers would view you more negatively if they knew you suffered from a mental health issue?',
+       'How willing would you be to share with friends and family that you have a mental illness?',
+       'Have you observed or experienced an unsupportive or badly handled response to a mental health issue in your current or previous workplace?',
+       'Do you have a family history of mental illness?',
+       'Have you had a mental health disorder in the past?',
+       'Do you currently have a mental health disorder?',
+       'Have you been diagnosed with a mental health condition by a medical professional?',
+       'Have you ever sought treatment for a mental health issue from a mental health professional?',
+       'If you have a mental health issue, do you feel that it interferes with your work when NOT being treated effectively?',
+       'What is your age?', 'What is your gender?',
+       'What country do you live in?', 'Do you work remotely?']
+  
+  dict_1 = dict(zip(list_2, list_1))
+  df_1 = pd.DataFrame(dict_1)
+  preds = ct.transform(df_1)
+
+  res=model.predict(preds.toarray())
+  res_proba = model.predict_proba(preds.toarray())
+
+  return res,res_proba
+
